@@ -57,15 +57,18 @@ def calendar_input(input_year , input_month, input_day, input_attend):
         hiduke = hiduke + datetime.timedelta(days=1)
 
     # ランダムに日にちを取得する
-    day_check(year, month, weeklist, attend)
-    return weeklist
+    result = day_check(year, month, weeklist, attend)
+    return result
 
 def day_check(year, month, weeklist, attend):
     # 指定月の日数の取得
     fulmonth_num = (calendar.monthrange(year, month)[1])
 
+    # 定数
+    oneweek_num = 5
+
     # 週の数でループ回数を決める
-    week_loop = fulmonth_num / 7
+    week_loop = fulmonth_num / oneweek_num
 
     # ループの回数
     loop_count = 0
@@ -74,26 +77,30 @@ def day_check(year, month, weeklist, attend):
     work_point = 0
 
     # リストの初期化
-    weeklist2 = []
+    weeklist3 = []
 
     while loop_count < week_loop:
+        # リストの初期化
+        weeklist2 = []
         # 1週間分の日にちを出す
         if(loop_count == 0):
-            for x in range(7):
+            for x in range(oneweek_num):
                 weeklist2.append(weeklist[x])
-        elif(loop_count >= 1 and fulmonth_num > (7 + (loop_count * 7))):
-            for x in range(7):
-                weeklist2.append(weeklist[x + (1 + (7 * loop_count))])
-        elif (loop_count >= 1 and fulmonth_num < 7 + (loop_count * 7)):
-            range_num = fulmonth_num - (loop_count * 7 + 1)
+        elif(loop_count >= 1 and fulmonth_num > (oneweek_num + (loop_count * oneweek_num))):
+            for x in range(oneweek_num):
+                weeklist2.append(weeklist[x + (1 + (oneweek_num * loop_count))])
+        elif (loop_count >= 1 and fulmonth_num < oneweek_num + (loop_count * oneweek_num)):
+            range_num = fulmonth_num - (loop_count * oneweek_num + 1)
             if(range_num != 0):
                 for x in range(range_num):
-                    weeklist2.append(weeklist[x + (1 + (7 * loop_count))])
+                    weeklist2.append(weeklist[x + (1 + (oneweek_num * loop_count))])
             else:
                 pass
         
-        # 日にちを取り出して週の土日勤務の複合を取りだす
-        get_day_count = fulmonth_num - (loop_count * 7 + 1)
+        # 日にちを取り出す
+        get_day_count = fulmonth_num - (loop_count * oneweek_num + 1)
+        
+        # 週から3日ランダムに取り出すので、3日以下の場合の処理
         if(get_day_count >= 3):
             get_day_count = 3
             random_day = (random.sample(weeklist2,3))
@@ -103,29 +110,30 @@ def day_check(year, month, weeklist, attend):
             random_day = weeklist2
         else:
             pass
-
+        
+        # 平日と休日でポイントを振り、翌週のシフトに連続して、休日が来ないようにする
         if(get_day_count > 0):
-
             for x in range(get_day_count):
                 rand = (random_day[x])
-                if('Saturday' in rand):
-                    work_point += 2
-                else:
-                    work_point += 1
-                if('Sunday' in rand):
-                    work_point += 2
-                else:
-                    work_point += 1
-                print(rand)
+                # if('Saturday' in rand):
+                #     work_point += 2
+                # elif('Sunday' in rand):
+                #     work_point += 2
+                # else:
+                #     work_point += 1
+                weeklist3.append(rand)
 
         # ランダム取得した日数情報の初期化
-        weeklist2 = []
-
+        # weeklist2 = []
+        # print(weeklist3)
         # ループ回数のカウント
         loop_count += 1
+
         # 週でランダム取得した日の曜日ポイントの合計値
         # 現在は合計しているが、週ごとに集計して、翌週には土日に入らないように分岐を入れたりする予定
-        print(work_point)
+        # print(work_point)
+        # work_point = 0
+    return weeklist3
 
 # 月の末日を取得
 def get_last_day(year, month):
