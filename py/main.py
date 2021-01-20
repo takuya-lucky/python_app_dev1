@@ -38,6 +38,6 @@ import cgi
 # カレンダー情報の取得
 shift = work_calendar_app.calendar_input()
 # shift = work_calendar_app.get_random_shift()
-# sorted_shift = sorted(shift, key=lambda s: s[0])
-# print(sorted_shift)
-print(shift)
+sorted_shift = sorted(shift, key=lambda s: s[0])
+print(sorted_shift)
+# print(shift)

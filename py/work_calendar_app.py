@@ -91,6 +91,7 @@ def day_check(year, month, weeklist, weekly):
    
     # ループの回数
     loop_count = 0
+    loop_make_shift = 0
 
     # 日付リストの初期化
     attendance_date = []
@@ -132,15 +133,28 @@ def day_check(year, month, weeklist, weekly):
             shift_time = get_random_shift(shift_member, box, weeklist, work_day, year, month)
 
             # リストにシフトデータを追加する
+            # ４日目と５日目は１日目と２日目に仕事を割り当てて、人数を確保する
             for x in range(attend_work):
+                if work_day == 3 and loop_make_shift == 0:
+                    attendance_date.append([[[weeklist[0]], shift_time ,shift_member]])
                     attendance_date.append([[[weeklist[work_day + x]], shift_time ,shift_member]])
                     box.append([[[weeklist[work_day + x]], shift_time]])
-
+                    
+                elif work_day == 4 and loop_make_shift == 0:
+                    attendance_date.append([[[weeklist[0]], shift_time ,shift_member]])
+                    attendance_date.append([[[weeklist[1]], shift_time ,shift_member]])
+                    attendance_date.append([[[weeklist[work_day + x]], shift_time ,shift_member]])
+                    box.append([[[weeklist[work_day + x]], shift_time]])
+                else:
+                    attendance_date.append([[[weeklist[work_day + x]], shift_time ,shift_member]])
+                    box.append([[[weeklist[work_day + x]], shift_time]])
+                loop_make_shift = 1
             # 仕事をした最終日から、休み分（デフォルトは2日）を加えて、次の週のシフトのスタートにする
             work_day += attend_work + holiday
 
             # シフトの作成回数を増やす
             shift_count += 1
+            loop_make_shift = 0
 
         loop_count = 1
     return attendance_date
