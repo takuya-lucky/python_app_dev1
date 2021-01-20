@@ -8,7 +8,7 @@ def worker_input():
     input_name = input('名前を入力してください。→')
 
     # 新人かどうかの設定
-    # input_type = input('新人の場合は１を入力してください。違う場合は１以外あるいは未入力でお願いします。→')
+    input_type = input('新人または新人につく方の場合は１を入力してください。違う場合は１以外あるいは未入力でお願いします。→')
 
     # 名前が未入力だった場合再入力
     if not input_name:
@@ -18,25 +18,21 @@ def worker_input():
         pass
 
     # 入力値のチェック
-    # try:
-    #     input_type = int(input_type)
-    #     if(input_type != 1):
-    # i        input_type = 0
-    #     else:
-    #         pass
-    # except:
-    #     input_type = 0
+    try:
+        input_type = int(input_type)
+        if(input_type != 1):
+            input_type = 0
+        else:
+            pass
+    except:
+        input_type = 0
     
     # 従業員のデータをリストに入れる
     worker_list = []
     
     # 従業員の名前
     worker_list.append(input_name)
-
-    # 従業員が新人かどうかの判定
-    input_type = 0
-
-    # worker_list.append(input_type)
+    worker_list.append(input_type)
     return worker_list
 
 # 従業員の人数の設定
@@ -58,5 +54,8 @@ def check_worker_num():
     for x in range(input_worker_num):
         data = worker_input()
         worker_data.append(data)
+    
+    # 新人優先で並び替える
+    worker_data = sorted(worker_data, key=lambda s: s[1],reverse=True)
     
     return worker_data
