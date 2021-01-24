@@ -1,0 +1,43 @@
+#: import does main
+TextWidget: #ルートに追加
+# ImageWidget:
+
+<TextWidget>:
+# <ImageWidget>:
+
+    BoxLayout:
+        # 縦一列にする
+        orientation: 'vertical'
+        size: root.size
+        id: input
+        l_text: 'ガンダム'
+
+        Spinner:
+            size_hint_y: None
+            size: 100,30
+            pos_hint:{'y':.9}
+            text: 'date'
+            values: does.calendar_data()
+
+        Label:
+            id: label1
+            font_size: 28
+        
+        Label:
+            id: label2
+            text: "君はガンダムマイスターにふさわしくない"
+       
+        BoxLayout:
+            TextInput:
+                id: text_box
+                size_hint_x: 70
+                font_size: 68
+                focus: True
+                on_text_validate: root.buttonClicked()
+
+            Button:
+                id: button1
+                size_hint_x: 30
+                text: "決定"
+                font_size: 40
+                on_press: input.l_text = 'テキスト'
